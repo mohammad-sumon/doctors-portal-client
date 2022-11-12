@@ -6,7 +6,8 @@ import PrimaryButton from "../../../components/PrimaryButton/PrimaryButton";
 const Banner = () => {
   return (
     <section style={{
-      background: `url(${bg})`
+      background: `url(${bg})`,
+      backgroundSize: 'cover'
     }}>
       <div className="hero">
         <div className="hero-content flex-col lg:flex-row-reverse">

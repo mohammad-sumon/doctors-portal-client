@@ -7,7 +7,8 @@ const MakeAppointment = () => {
   return (
     <section className="mt-32"
     style={{
-        background: `url(${appointment})`
+        background: `url(${appointment})`,
+        backgroundSize: 'cover'
     }} 
     >
       <div className="hero">
