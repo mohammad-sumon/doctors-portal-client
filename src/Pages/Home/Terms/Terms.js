@@ -1,5 +1,6 @@
 import React from "react";
 import treatment from '../../../assets/images/treatment.png';
+import PrimaryButton from "../../../components/PrimaryButton/PrimaryButton";
 
 const Terms = () => {
   return (
@@ -14,9 +15,7 @@ const Terms = () => {
           <p className="py-6">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sed cumque, doloremque ipsam reprehenderit quos modi aperiam quidem aliquam. Maiores est et, perspiciatis doloremque maxime fugit corporis? Veniam beatae necessitatibus animi eveniet ex, ipsa dignissimos laborum esse odio consequatur est in possimus numquam distinctio voluptatibus soluta vitae nisi alias molestiae.
           </p>
-          <button className="btn btn-primary bg-gradient-to-r from-primary to-secondary text-white">
-            Get Started
-          </button>
+          <PrimaryButton>Get Started</PrimaryButton>
         </div>
       </div>
     </div>
