@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import React from "react";
 
-const BookingModal = ({ treatment, selectedDate }) => {
+const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
   // treatment is just another name of appointmentOptions with name,slots, _id
   const { name, slots } = treatment;
   const date = format(selectedDate, "PP");
@@ -11,12 +11,31 @@ const BookingModal = ({ treatment, selectedDate }) => {
     const form = event.target;
 
     const slot = form.slot.value;
-    const name = form.name.value;
+    const pname = form.name.value;
     const email = form.email.value;
     const phone = form.phone.value;
 
-    console.log(date, slot, name, email, phone);
-  }
+    // pname means patient name and
+    // name means treatment name
+    const booking = {
+        appointmentDate: date,
+        treatment: name,
+        patient: pname,
+        slot,
+        email,
+        phone
+    }
+
+    // TODO: send data to the server
+    // and once data is saved then close the modal
+    // and display success toast
+
+    console.log(booking);
+    setTreatment(null);
+
+    // ekhane console.log korle ekta key er jonno warning dite pare sejonno amra ei kaj ta korte pari. Jehetu amra slots k map korsi ar slots er moddhe unique kono id nei sehetu amra index diye dite pari. Cz jekono map er moddhe 3 ta jinis thake 'value', 'index', 'array'. Sample below...
+    // [3, 4, 5].map((value, i) => console.log(value));
+  };
 
   return (
     <>
@@ -30,7 +49,10 @@ const BookingModal = ({ treatment, selectedDate }) => {
             ✕
           </label>
           <h3 className="text-lg font-bold">{name}</h3>
-          <form onSubmit={handleBooking} className="grid grid-cols-1 gap-3 mt-10">
+          <form
+            onSubmit={handleBooking}
+            className="grid grid-cols-1 gap-3 mt-10"
+          >
             <input
               disabled
               type="text"
@@ -38,8 +60,10 @@ const BookingModal = ({ treatment, selectedDate }) => {
               className="input input-bordered w-full"
             />
             <select name="slot" className="select select-bordered w-full">
-              {slots.map((slot) => (
-                <option value={slot}>{slot}</option>
+              {slots.map((slot, i) => (
+                <option key={i} value={slot}>
+                  {slot}
+                </option>
               ))}
             </select>
             <input
