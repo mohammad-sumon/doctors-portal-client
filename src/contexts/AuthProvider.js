@@ -7,14 +7,18 @@ const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    // private route step
+    const [loading, setLoading] = useState(true);
 
     // user notun kore create korar jonno
     const createUser = (email, password) => {
+        setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     };
 
     // create kora user er login korar jonno
     const signIn = (email, password) => {
+        setLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     };
 
@@ -25,6 +29,7 @@ const AuthProvider = ({ children }) => {
 
     // user k log out korar jonno
     const logOut = () => {
+        setLoading(true);
         return signOut(auth);
     }
 
@@ -37,6 +42,7 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             console.log('user obserbing');
             setUser(currentUser);
+            setLoading(false);
         });
         
         return () => unsubscribe();
@@ -50,6 +56,7 @@ const AuthProvider = ({ children }) => {
     updateUser,
     logOut,
     user,
+    loading
   };
 
   return (
