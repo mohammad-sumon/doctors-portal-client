@@ -1,10 +1,14 @@
 import { format } from "date-fns";
-import React from "react";
+import React, { useContext } from "react";
+import toast from "react-hot-toast";
+import { AuthContext } from "../../../contexts/AuthProvider";
 
 const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
   // treatment is just another name of appointmentOptions with name,slots, _id
   const { name, slots } = treatment;
   const date = format(selectedDate, "PP");
+
+  const { user } = useContext(AuthContext);
 
   const handleBooking = (event) => {
     event.preventDefault();
@@ -18,20 +22,35 @@ const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
     // pname means patient name and
     // name means treatment name
     const booking = {
-        appointmentDate: date,
-        treatment: name,
-        patient: pname,
-        slot,
-        email,
-        phone
-    }
+      appointmentDate: date,
+      treatment: name,
+      patient: pname,
+      slot,
+      email,
+      phone,
+    };
 
     // TODO: send data to the server
     // and once data is saved then close the modal
     // and display success toast
 
-    console.log(booking);
-    setTreatment(null);
+    fetch("http://localhost:5000/bookings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.acknowledged) {
+          setTreatment(null);
+          toast.success("Booking Confirmed");
+        }
+      });
+
+    // console.log(booking);
 
     // ekhane console.log korle ekta key er jonno warning dite pare sejonno amra ei kaj ta korte pari. Jehetu amra slots k map korsi ar slots er moddhe unique kono id nei sehetu amra index diye dite pari. Cz jekono map er moddhe 3 ta jinis thake 'value', 'index', 'array'. Sample below...
     // [3, 4, 5].map((value, i) => console.log(value));
@@ -69,12 +88,16 @@ const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
             <input
               name="name"
               type="text"
+              defaultValue={user?.displayName}
+              disabled
               placeholder="Your Name"
               className="input input-bordered w-full"
             />
             <input
               name="email"
               type="email"
+              defaultValue={user?.email}
+              disabled
               placeholder="Email Address"
               className="input input-bordered w-full"
             />

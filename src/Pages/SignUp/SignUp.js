@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
-import {toast} from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 import { GoogleAuthProvider } from "firebase/auth";
 
 const SignUp = () => {
@@ -12,43 +12,45 @@ const SignUp = () => {
     handleSubmit,
   } = useForm();
 
-  const {createUser, updateUser, googleSingIn} = useContext(AuthContext);
-  const [signUpError, setSignUpError] = useState('');
+  const { createUser, updateUser, googleSingIn } = useContext(AuthContext);
+  const [signUpError, setSignUpError] = useState("");
+
+  const navigate = useNavigate();
 
   const googleProvider = new GoogleAuthProvider();
 
   const handleSignUp = (data) => {
     console.log(data);
-    setSignUpError('');
+    setSignUpError("");
 
     createUser(data.email, data.password)
-    .then(result => {
-      const user = result.user;
-      console.log(user);
-      toast.success('User Created Successfully');
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        toast.success("User Created Successfully");
 
-      const userInfo = {
-        displayName: data.name
-      }
-      updateUser(userInfo)
-      .then(() => {})
-      .catch(error => console.log(error));
-
-    })
-    .catch(error => {
-      console.log(error);
-      setSignUpError(error.message)
-    })
-    
+        const userInfo = {
+          displayName: data.name,
+        };
+        updateUser(userInfo)
+          .then(() => {
+            navigate("/");
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => {
+        console.log(error);
+        setSignUpError(error.message);
+      });
   };
 
   const googleLogin = () => {
     googleSingIn(googleProvider)
-    .then(result => {
-      const user = result.user;
-      console.log(user);
-    })
-    .catch(error => console.log(error));
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -127,7 +129,9 @@ const SignUp = () => {
           </Link>
         </p>
         <div className="divider">OR</div>
-        <button onClick={googleLogin} className="btn btn-outline w-full">CONTINUE WITH GOOGLE</button>
+        <button onClick={googleLogin} className="btn btn-outline w-full">
+          CONTINUE WITH GOOGLE
+        </button>
       </div>
     </div>
   );
