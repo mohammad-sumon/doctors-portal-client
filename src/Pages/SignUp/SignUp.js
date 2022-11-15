@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 import {toast} from 'react-hot-toast';
+import { GoogleAuthProvider } from "firebase/auth";
 
 const SignUp = () => {
   const {
@@ -11,8 +12,10 @@ const SignUp = () => {
     handleSubmit,
   } = useForm();
 
-  const {createUser, updateUser} = useContext(AuthContext);
+  const {createUser, updateUser, googleSingIn} = useContext(AuthContext);
   const [signUpError, setSignUpError] = useState('');
+
+  const googleProvider = new GoogleAuthProvider();
 
   const handleSignUp = (data) => {
     console.log(data);
@@ -37,6 +40,15 @@ const SignUp = () => {
       setSignUpError(error.message)
     })
     
+  };
+
+  const googleLogin = () => {
+    googleSingIn(googleProvider)
+    .then(result => {
+      const user = result.user;
+      console.log(user);
+    })
+    .catch(error => console.log(error));
   };
 
   return (
@@ -115,7 +127,7 @@ const SignUp = () => {
           </Link>
         </p>
         <div className="divider">OR</div>
-        <button className="btn btn-outline w-full">CONTINUE WITH GOOGLE</button>
+        <button onClick={googleLogin} className="btn btn-outline w-full">CONTINUE WITH GOOGLE</button>
       </div>
     </div>
   );
