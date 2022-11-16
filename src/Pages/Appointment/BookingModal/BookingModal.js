@@ -49,9 +49,11 @@ const BookingModal = ({ treatment, setTreatment, selectedDate, refetch }) => {
           toast.success("Booking Confirmed");
           refetch();
         }
+        else{
+          toast.error(data.message);
+        }
       });
 
-    // console.log(booking);
 
     // ekhane console.log korle ekta key er jonno warning dite pare sejonno amra ei kaj ta korte pari. Jehetu amra slots k map korsi ar slots er moddhe unique kono id nei sehetu amra index diye dite pari. Cz jekono map er moddhe 3 ta jinis thake 'value', 'index', 'array'. Sample below...
     // [3, 4, 5].map((value, i) => console.log(value));
