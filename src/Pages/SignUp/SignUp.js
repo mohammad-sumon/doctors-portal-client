@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { toast } from "react-hot-toast";
 import { GoogleAuthProvider } from "firebase/auth";
+import useToken from "../../hooks/useToken";
 
 const SignUp = () => {
   const {
@@ -15,12 +16,18 @@ const SignUp = () => {
   const { createUser, updateUser, googleSingIn } = useContext(AuthContext);
   const [signUpError, setSignUpError] = useState("");
 
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
+  const [token] = useToken(createdUserEmail);
   const navigate = useNavigate();
+
+  if (token) {
+    navigate("/");
+  }
 
   const googleProvider = new GoogleAuthProvider();
 
   const handleSignUp = (data) => {
-    console.log(data);
+    // console.log(data);
     setSignUpError("");
 
     createUser(data.email, data.password)
@@ -55,39 +62,25 @@ const SignUp = () => {
   };
 
   const saveUser = (name, email) => {
-    const user = {name, email};
-    fetch('http://localhost:5000/users', {
-      method: 'POST',
+    const user = { name, email };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json",
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     })
-    .then(res => res.json())
-    .then(data => {
-      // console.log(data);
-      getUserToken(email);
-    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCreatedUserEmail(email);
+      });
   };
-
-
-  const getUserToken = email => {
-    fetch(`http://localhost:5000/jwt?email=${email}`)
-    .then(res => res.json())
-    .then(data => {
-      if(data.accessToken){
-        localStorage.setItem('accessToken', data.accessToken);
-        navigate('/');
-      }
-    })
-  };
-
 
   return (
     <div className="h-[800px] flex justify-center items-center">
       <div className="w-96 p-7">
         <h2 className="text-xl text-center">Sign Up</h2>
-        <form onSubmit={handleSubmit(handleSubmit(handleSignUp))}>
+        <form onSubmit={handleSubmit(handleSignUp)}>
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Name</span>

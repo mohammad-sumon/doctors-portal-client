@@ -7,20 +7,26 @@ import AppointmentOption from "./AppointmentOption";
 
 const AvailableAppointments = ({ selectedDate }) => {
   const [treatment, setTreatment] = useState(null);
-  const date = format(selectedDate, 'PP');
+  const date = format(selectedDate, "PP");
 
-  const { data: appointmentOptions = [], refetch, isLoading } = useQuery({
+  const {
+    data: appointmentOptions = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["appointmentOptions", date],
-    queryFn: () =>
-      fetch(`http://localhost:5000/appointmentOptions?date=${date}`).then((res) =>
-        res.json()
-      ),
+    queryFn: async () => {
+      const res = await fetch(
+        `http://localhost:5000/v2/appointmentOptions?date=${date}`
+      );
+      const data = await res.json();
+      return data;
+    },
   });
 
-  if(isLoading){
-    return <Loading></Loading>
-  };
-
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
 
   return (
     <section className="my-16">
