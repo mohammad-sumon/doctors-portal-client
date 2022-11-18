@@ -19,6 +19,7 @@ const MyAppointment = () => {
       return data;
     },
   });
+  // console.log(bookings);
 
   return (
     <div>

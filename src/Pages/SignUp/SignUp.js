@@ -27,7 +27,6 @@ const SignUp = () => {
   const googleProvider = new GoogleAuthProvider();
 
   const handleSignUp = (data) => {
-    // console.log(data);
     setSignUpError("");
 
     createUser(data.email, data.password)
@@ -41,7 +40,6 @@ const SignUp = () => {
         };
         updateUser(userInfo)
           .then(() => {
-            // navigate("/");
             saveUser(data.name, data.email);
           })
           .catch((error) => console.log(error));
